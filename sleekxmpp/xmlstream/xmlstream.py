@@ -1276,14 +1276,13 @@ class XMLStream(object):
                 shutdown = True
             except (SyntaxError, ExpatError) as e:
                 log.error("Error reading from XML stream.")
-                self.exception(e)
             except Socket.error as serr:
                 self.event('socket_error', serr, direct=True)
-                log.exception('Socket Error')
             except Exception as e:
                 if not self.stop.is_set():
                     log.exception('Connection error.')
-                self.exception(e)
+                else:
+                    log.exception('Unknown error.')
 
             if not shutdown and not self.stop.is_set() \
                and self.auto_reconnect:
